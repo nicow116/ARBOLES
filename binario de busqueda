@@ -1,0 +1,84 @@
+class Nodo:
+    def __init__(self, valor):
+        self.valor = valor
+        self.izquierda = None
+        self.derecha = None
+
+class ArbolBinarioBusqueda:
+    def __init__(self):
+        self.raiz = None
+
+    def insertar(self, valor):
+        if not self.raiz:
+            self.raiz = Nodo(valor)
+        else:
+            self._insertar_recursivo(self.raiz, valor)
+    
+    def _insertar_recursivo(self, nodo_actual, valor):
+        if valor < nodo_actual.valor:
+            if nodo_actual.izquierda is None:
+                nodo_actual.izquierda = Nodo(valor)
+            else:
+                self._insertar_recursivo(nodo_actual.izquierda, valor)
+        else:
+            if nodo_actual.derecha is None:
+                nodo_actual.derecha = Nodo(valor)
+            else:
+                self._insertar_recursivo(nodo_actual.derecha, valor)
+    
+    def grado(self, nodo=None):
+        if nodo is None:
+            nodo = self.raiz
+        if nodo is None:
+            return 0
+        return (nodo.izquierda is not None) + (nodo.derecha is not None)
+    
+    def inorden(self, nodo=None):
+        if nodo is None:
+            nodo = self.raiz
+        elementos = []
+        if nodo.izquierda:
+            elementos.extend(self.inorden(nodo.izquierda))
+        elementos.append(nodo.valor)
+        if nodo.derecha:
+            elementos.extend(self.inorden(nodo.derecha))
+        return elementos
+    
+    def preorden(self, nodo=None):
+        if nodo is None:
+            nodo = self.raiz
+        elementos = []
+        elementos.append(nodo.valor)
+        if nodo.izquierda:
+            elementos.extend(self.preorden(nodo.izquierda))
+        if nodo.derecha:
+            elementos.extend(self.preorden(nodo.derecha))
+        return elementos
+    
+    def postorden(self, nodo=None):
+        if nodo is None:
+            nodo = self.raiz
+        elementos = []
+        if nodo.izquierda:
+            elementos.extend(self.postorden(nodo.izquierda))
+        if nodo.derecha:
+            elementos.extend(self.postorden(nodo.derecha))
+        elementos.append(nodo.valor)
+        return elementos
+
+# Crear el árbol y agregar elementos
+arbol = ArbolBinarioBusqueda()
+while True:
+    valor = input("Ingrese un valor (o 'no' para detenerse): ")
+    if valor.lower() == 'no':
+        break
+    arbol.insertar(int(valor))
+
+# Obtener el grado del árbol
+grado_arbol = arbol.grado()
+print(f"El grado del árbol es: {grado_arbol}")
+
+# Realizar los recorridos
+print("Recorrido Inorden:", arbol.inorden())
+print("Recorrido Preorden:", arbol.preorden())
+print("Recorrido Postorden:", arbol.postorden())
