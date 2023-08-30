@@ -1,3 +1,4 @@
+
 class Nodo:
     def __init__(self, valor):
         self.valor = valor
@@ -65,6 +66,21 @@ class ArbolBinarioBusqueda:
             elementos.extend(self.postorden(nodo.derecha))
         elementos.append(nodo.valor)
         return elementos
+    
+    def encontrar_ancestro_comun_mas_lejano(self, nodo, valor1, valor2):
+        if nodo is None:
+            return None
+
+        if nodo.valor == valor1 or nodo.valor == valor2:
+            return nodo
+
+        izquierda = self.encontrar_ancestro_comun_mas_lejano(nodo.izquierda, valor1, valor2)
+        derecha = self.encontrar_ancestro_comun_mas_lejano(nodo.derecha, valor1, valor2)
+
+        if izquierda and derecha:
+            return nodo
+
+        return izquierda if izquierda else derecha
 
 # Crear el árbol y agregar elementos
 arbol = ArbolBinarioBusqueda()
@@ -82,3 +98,12 @@ print(f"El grado del árbol es: {grado_arbol}")
 print("Recorrido Inorden:", arbol.inorden())
 print("Recorrido Preorden:", arbol.preorden())
 print("Recorrido Postorden:", arbol.postorden())
+
+# Encontrar el ancestro en común más lejano entre dos nodos
+valor1 = int(input("Ingrese el primer valor para encontrar el ancestro en común: "))
+valor2 = int(input("Ingrese el segundo valor para encontrar el ancestro en común: "))
+ancestro_comun = arbol.encontrar_ancestro_comun_mas_lejano(arbol.raiz, valor1, valor2)
+if ancestro_comun:
+    print(f"El ancestro en común más lejano entre {valor1} y {valor2} es {ancestro_comun.valor}")
+else:
+    print(f"No se encontró un ancestro en común para los nodos {valor1} y {valor2}")
